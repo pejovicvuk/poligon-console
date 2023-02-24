@@ -23,6 +23,10 @@ namespace Poligon // Note: actual namespace depends on the project name.
     class Vektor
     {
         public Tacka a, b;
+        public Vektor(Tacka a)
+        {
+            this.a = a;
+        }
         public Vektor(Tacka a, Tacka b)
         {
             this.a = a;
@@ -72,6 +76,22 @@ namespace Poligon // Note: actual namespace depends on the project name.
                 vektori[i] = vektor;
             }
         }
+        public void BoljiUnos()
+        {
+            n = Convert.ToInt16(Console.ReadLine());
+            vektori = new Vektor[n];
+            Tacka a = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
+            Tacka b = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
+            Vektor vektorPrvi = new Vektor(a, b);
+            vektori[0] = vektorPrvi;
+            for (int i = 1; i < n; i++)
+            {
+                Tacka tacka = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
+                Vektor vektor = new Vektor(b, tacka);
+                vektori[i] = vektor;
+                b = tacka;
+            }
+        }
         public void Ispis()
         {
             for (int i = 0; i < vektori.Length; i++)
@@ -116,7 +136,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
         {
             int t = 0;
             double ugao;
-            for (int i = 0; i < n - 1  ; i++) //angle = atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
+            for (int i = 0; i < n - 1  ; i++) //ugao = atan(2.y- 1.x, 2.x - 1.y);
             {
                 ugao = Math.Atan2((vektori[i + 1].b.y - vektori[i + 1].a.y - vektori[i].b.x - vektori[i].a.x), (vektori[i + 1].b.x - vektori[i + 1].a.x - vektori[i].b.y - vektori[i].a.y));
                 if (ugao > 0)
@@ -140,13 +160,12 @@ namespace Poligon // Note: actual namespace depends on the project name.
             }
         }
 
-
         internal class Program
         {
             static void Main(string[] args)
             {
                 Poligon poligon = new Poligon();
-                poligon.Unos();
+                poligon.BoljiUnos();
                 poligon.Ispis();
                 Console.WriteLine(poligon.Prost());
                 Console.WriteLine(poligon.Konveksan());
