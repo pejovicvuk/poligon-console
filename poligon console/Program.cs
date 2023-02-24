@@ -55,7 +55,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
     {
         public Vektor[] vektori;
         public int n;
-        
+
         public Poligon()
         {
 
@@ -76,7 +76,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
         {
             for (int i = 0; i < vektori.Length; i++)
             {
-                Console.WriteLine("Vektor " + i + '\n' +"Tacka A(" + vektori[i].a.x + ", " + vektori[i].a.y + ")" + '\n' + "Tacka B(" + vektori[i].b.x + ", " + vektori[i].b.y + ")");
+                Console.WriteLine("Vektor " + i + '\n' + "Tacka A(" + vektori[i].a.x + ", " + vektori[i].a.y + ")" + '\n' + "Tacka B(" + vektori[i].b.x + ", " + vektori[i].b.y + ")");
             }
         }
         public bool Prost()
@@ -112,18 +112,45 @@ namespace Poligon // Note: actual namespace depends on the project name.
 
             return true;
         }
-
-    }
-
-
-    internal class Program
-    {
-        static void Main(string[] args)
+        public bool Konveksan()
         {
-            Poligon poligon = new Poligon();
-            poligon.Unos();
-            poligon.Ispis();
-            Console.WriteLine(poligon.Prost());
+            int t = 0;
+            double ugao;
+            for (int i = 0; i < n - 1  ; i++) //angle = atan2(vector2.y, vector2.x) - atan2(vector1.y, vector1.x);
+            {
+                ugao = Math.Atan2((vektori[i + 1].b.y - vektori[i + 1].a.y - vektori[i].b.x - vektori[i].a.x), (vektori[i + 1].b.x - vektori[i + 1].a.x - vektori[i].b.y - vektori[i].a.y));
+                if (ugao > 0)
+                {
+                    t++;
+                }
+            }
+            //slucaj kada se porede poslednji vektor sa prvim
+            ugao = Math.Atan2((vektori[0].b.y - vektori[0].a.y - vektori[n - 1].b.x - vektori[n - 1].a.x), (vektori[0].b.x - vektori[0].a.x - vektori[n - 1].b.y - vektori[n - 1].a.y));
+            if (ugao > 0)
+            {
+                t++;
+            }
+            if (t == 0 || t == n)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+        internal class Program
+        {
+            static void Main(string[] args)
+            {
+                Poligon poligon = new Poligon();
+                poligon.Unos();
+                poligon.Ispis();
+                Console.WriteLine(poligon.Prost());
+                Console.WriteLine(poligon.Konveksan());
+            }
         }
     }
 }
