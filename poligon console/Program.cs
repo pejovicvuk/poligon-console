@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 
 namespace Poligon // Note: actual namespace depends on the project name.
@@ -27,11 +28,28 @@ namespace Poligon // Note: actual namespace depends on the project name.
             this.a = a;
             this.b = b;
         }
-        public static bool SekuSe(Vektor prvi, Vektor drugi)
+        public static bool SekuSe(Vektor v1, Vektor v2)
         {
-            int I1 = [(prvi.a.x, prvi.b.x), max(prvi.a.x, prvi.b.x)]
-            int I2 = [min(X3, X4), max(X3, X4)]
+            Tacka v1a = v1.a;
+            Tacka v1b = v1.b;
+            Tacka v2a = v2.a;
+            Tacka v2b = v2.b;
+            double s1_x, s1_y, s2_x, s2_y;
+            s1_x = v1b.x - v1a.x; s1_y = v1b.y - v1a.y;
+            s2_x = v2b.x - v2a.x; s2_y = v2b.y - v2a.y;
+
+            double s, t;
+            s = (-s1_y * (v1a.x - v2a.x) + s1_x * (v1a.y - v2a.y)) / (-s2_x * s1_y + s1_x * s2_y);
+            t = (s2_x * (v1a.y - v2a.y) - s2_y * (v1a.x - v2a.x)) / (-s2_x * s1_y + s1_x * s2_y);
+
+            if (s >= 0 && s <= 1 && t >= 0 && t <= 1 && !(s == 0 && t == 0) && !(s == 1 && t == 1))
+            {
+                return true;
+            }
+
+            return false;
         }
+
     }
     class Poligon
     {
@@ -61,30 +79,40 @@ namespace Poligon // Note: actual namespace depends on the project name.
                 Console.WriteLine("Vektor " + i + '\n' +"Tacka A(" + vektori[i].a.x + ", " + vektori[i].a.y + ")" + '\n' + "Tacka B(" + vektori[i].b.x + ", " + vektori[i].b.y + ")");
             }
         }
-        public bool prost()
+        public bool Prost()
         {
-            // ponovljeno teme
-            for (int i = 0; i < n - 1; i++)
+            if (n < 3)
             {
-                for (int j = i + 1; j < n; j++)
+                return false;
+            }
+
+            for (int i = 0; i < vektori.Length; i++)
+            {
+                Vektor v1 = vektori[i];
+                Tacka a = v1.a;
+                Tacka b = v1.b;
+
+                for (int j = i + 2; j < vektori.Length; j++)
                 {
-                    if (Tacka.Jednako(vektori[i].a, vektori[j].b)) return false;
+                    Vektor v2 = vektori[j];
+                    Tacka c = v2.a;
+                    Tacka d = v2.b;
+
+                    if (Tacka.Jednako(a, c) || Tacka.Jednako(a, d) || Tacka.Jednako(b, c) || Tacka.Jednako(b, d))
+                    {
+                        continue;
+                    }
+
+                    if (Vektor.SekuSe(v1, v2))
+                    {
+                        return false;
+                    }
                 }
             }
-            for (int i = 0; i < broj_temena - 2; i++)
-            {
-                vektor prvi = new vektor(teme[i], teme[i + 1]);
-                for (int j = i + 2; j < broj_temena; j++)
-                {
-                    if (i == 0 && j == broj_temena - 1) continue;
-                    // prvi.stampa();
-                    vektor drugi = new vektor(teme[j], teme[(j + 1) % broj_temena]);
-                    // drugi.stampa();
-                    if (vektor.seku_se(prvi, drugi) == true) return false;
-                }
-            }
+
             return true;
         }
+
     }
 
 
@@ -95,6 +123,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
             Poligon poligon = new Poligon();
             poligon.Unos();
             poligon.Ispis();
+            Console.WriteLine(poligon.Prost());
         }
     }
 }
