@@ -53,35 +53,32 @@ namespace Poligon // Note: actual namespace depends on the project name.
 
             return false;
         }
+        public static double VektorskiProizvod(Vektor prvi, Vektor drugi)
+        {
+            double part1 = (prvi.b.x - prvi.a.x) * (drugi.b.y - drugi.a.y);
+            double part2 = (drugi.b.x - drugi.a.x) * (prvi.b.y - prvi.a.y);
+            return part1 - part2;
+        }
 
     }
     class Poligon
     {
         public Vektor[] vektori;
+        public Tacka[] tacke;
         public int n;
 
         public Poligon()
         {
 
         }
-        public void Unos()
-        {
-            n = Convert.ToInt16(Console.ReadLine());
-            vektori = new Vektor[n];
-            for (int i = 0; i < n; i++)
-            {
-                Tacka a = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
-                Tacka b = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
-                Vektor vektor = new Vektor(a, b);
-                vektori[i] = vektor;
-            }
-        }
         public void BoljiUnos()
         {
             n = Convert.ToInt16(Console.ReadLine());
             vektori = new Vektor[n];
+            tacke = new Tacka[n + 1];
             Tacka a = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
             Tacka b = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
+            tacke[0] = a; tacke[1] = b;
             Vektor vektorPrvi = new Vektor(a, b);
             vektori[0] = vektorPrvi;
             for (int i = 1; i < n; i++)
@@ -89,8 +86,10 @@ namespace Poligon // Note: actual namespace depends on the project name.
                 Tacka tacka = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
                 Vektor vektor = new Vektor(b, tacka);
                 vektori[i] = vektor;
+                tacke[i + 1] = tacka;
                 b = tacka;
             }
+            Array.Resize(ref tacke, n);
         }
         public void Ispis()
         {
@@ -134,19 +133,21 @@ namespace Poligon // Note: actual namespace depends on the project name.
         }
         public bool Konveksan()
         {
-            int t = 0;
-            double ugao;
-            for (int i = 0; i < n - 1  ; i++) //ugao = atan(2.y- 1.x, 2.x - 1.y);
+            if (Prost() == true)
             {
-                ugao = Math.Atan2((vektori[i + 1].b.y - vektori[i + 1].a.y - vektori[i].b.x - vektori[i].a.x), (vektori[i + 1].b.x - vektori[i + 1].a.x - vektori[i].b.y - vektori[i].a.y));
-                if (ugao > 0)
+                return false;
+            }
+            int t = 0;
+            for (int i = 0; i < n - 1; i++)
+            {
+                Vektor v1 = vektori[i];
+                Vektor v2 = vektori[i + 1];
+                if (Vektor.VektorskiProizvod(v1, v2) >= 0)
                 {
                     t++;
                 }
             }
-            //slucaj kada se porede poslednji vektor sa prvim
-            ugao = Math.Atan2((vektori[0].b.y - vektori[0].a.y - vektori[n - 1].b.x - vektori[n - 1].a.x), (vektori[0].b.x - vektori[0].a.x - vektori[n - 1].b.y - vektori[n - 1].a.y));
-            if (ugao > 0)
+            if (Vektor.VektorskiProizvod(vektori[n - 1], vektori[0]) >= 0)
             {
                 t++;
             }
@@ -159,6 +160,18 @@ namespace Poligon // Note: actual namespace depends on the project name.
                 return false;
             }
         }
+        public double Povrsina()
+        {
+            double pov = 0;
+            for (int i = 0; i < n; i++)
+            {
+                int j = (i + 1) % n;
+                pov += tacke[i].x * tacke[j].y;
+                pov -= tacke[i].y * tacke[j].x;
+            }
+            return Math.Abs(pov / 2);
+        }
+
 
         internal class Program
         {
@@ -167,8 +180,9 @@ namespace Poligon // Note: actual namespace depends on the project name.
                 Poligon poligon = new Poligon();
                 poligon.BoljiUnos();
                 poligon.Ispis();
-                Console.WriteLine(poligon.Prost());
-                Console.WriteLine(poligon.Konveksan());
+                Console.WriteLine("prost? " + poligon.Prost());
+                Console.WriteLine("konveksan? " + poligon.Konveksan());
+                Console.WriteLine("povrsina: " + poligon.Povrsina());
             }
         }
     }
