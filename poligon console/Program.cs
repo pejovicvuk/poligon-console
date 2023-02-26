@@ -184,7 +184,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
                     t++;
                 }
             }
-            if (t % 2 == 0 || t == 0)
+            if (t % 2 == 0)
             {
                 return false;
             }
