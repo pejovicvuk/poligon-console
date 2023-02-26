@@ -132,7 +132,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
 
             return true;
         }
-        public bool Konveksan()
+        public bool Konkavan()
         {
             if (Prost() == true)
             {
@@ -175,7 +175,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
         public bool TackaUPoligonu(Tacka tacka)
         {
             int t = 0;
-            Tacka tackaDaleko = new Tacka(int.MaxValue, int.MaxValue);
+            Tacka tackaDaleko = new Tacka(int.MaxValue, int.MaxValue - 1);
             Vektor vektorTest = new Vektor(tacka, tackaDaleko);
             for (int i = 0; i < vektori.Length; i++)
             {
@@ -199,11 +199,11 @@ namespace Poligon // Note: actual namespace depends on the project name.
             static void Main(string[] args)
             {
                 Poligon poligon = new Poligon();
-                Tacka tacka = new Tacka(1, 2);
+                Tacka tacka = new Tacka(1, 1);
                 poligon.BoljiUnos();
                 poligon.Ispis();
                 Console.WriteLine("prost? " + poligon.Prost());
-                Console.WriteLine("konveksan? " + poligon.Konveksan());
+                Console.WriteLine("konveksan? " + poligon.Konkavan());
                 Console.WriteLine("povrsina: " + poligon.Povrsina());
                 Console.WriteLine("tacka u poligonu? " + poligon.TackaUPoligonu(tacka));
             }
