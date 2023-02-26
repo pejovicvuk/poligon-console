@@ -8,8 +8,8 @@ namespace Poligon // Note: actual namespace depends on the project name.
 {
     class Tacka
     {
-        public int x, y;
-        public Tacka(int x, int y)
+        public double x, y;
+        public Tacka(double x, double y)
         {
             this.x = x;
             this.y = y;
@@ -23,10 +23,6 @@ namespace Poligon // Note: actual namespace depends on the project name.
     class Vektor
     {
         public Tacka a, b;
-        public Vektor(Tacka a)
-        {
-            this.a = a;
-        }
         public Vektor(Tacka a, Tacka b)
         {
             this.a = a;
@@ -34,10 +30,9 @@ namespace Poligon // Note: actual namespace depends on the project name.
         }
         public static bool SekuSe(Vektor v1, Vektor v2)
         {
-            Tacka v1a = v1.a;
-            Tacka v1b = v1.b;
-            Tacka v2a = v2.a;
-            Tacka v2b = v2.b;
+            Tacka v1a = v1.a;   Tacka v1b = v1.b;
+            Tacka v2a = v2.a;   Tacka v2b = v2.b;
+
             double s1_x, s1_y, s2_x, s2_y;
             s1_x = v1b.x - v1a.x; s1_y = v1b.y - v1a.y;
             s2_x = v2b.x - v2a.x; s2_y = v2b.y - v2a.y;
@@ -73,22 +68,28 @@ namespace Poligon // Note: actual namespace depends on the project name.
         }
         public void BoljiUnos()
         {
+            Console.WriteLine("koliko tacaka hoces? ");
             n = Convert.ToInt16(Console.ReadLine());
             vektori = new Vektor[n];
             tacke = new Tacka[n + 1];
+            Console.WriteLine("unesi T({0}) ", 0);
             Tacka a = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
+            Console.WriteLine("unesi T({0}) ", 1);
             Tacka b = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
             tacke[0] = a; tacke[1] = b;
             Vektor vektorPrvi = new Vektor(a, b);
             vektori[0] = vektorPrvi;
-            for (int i = 1; i < n; i++)
+            for (int i = 1; i < n - 1; i++)
             {
+                Console.WriteLine("unesi T({0}) ", i + 1);
                 Tacka tacka = new Tacka(Convert.ToInt16(Console.ReadLine()), Convert.ToInt16(Console.ReadLine()));
                 Vektor vektor = new Vektor(b, tacka);
                 vektori[i] = vektor;
                 tacke[i + 1] = tacka;
                 b = tacka;
             }
+            Vektor vektorPoslednji = new Vektor(b, tacke[0]);
+            vektori[n - 1] = vektorPoslednji;
             Array.Resize(ref tacke, n);
         }
         public void Ispis()
@@ -171,18 +172,40 @@ namespace Poligon // Note: actual namespace depends on the project name.
             }
             return Math.Abs(pov / 2);
         }
-
+        public bool TackaUPoligonu(Tacka tacka)
+        {
+            int t = 0;
+            Tacka tackaDaleko = new Tacka(int.MaxValue, int.MaxValue);
+            Vektor vektorTest = new Vektor(tacka, tackaDaleko);
+            for (int i = 0; i < vektori.Length; i++)
+            {
+                if (Vektor.SekuSe(vektorTest, vektori[i]))
+                {
+                    t++;
+                }
+            }
+            if (t % 2 == 0 || t == 0)
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
 
         internal class Program
         {
             static void Main(string[] args)
             {
                 Poligon poligon = new Poligon();
+                Tacka tacka = new Tacka(1, 2);
                 poligon.BoljiUnos();
                 poligon.Ispis();
                 Console.WriteLine("prost? " + poligon.Prost());
                 Console.WriteLine("konveksan? " + poligon.Konveksan());
                 Console.WriteLine("povrsina: " + poligon.Povrsina());
+                Console.WriteLine("tacka u poligonu? " + poligon.TackaUPoligonu(tacka));
             }
         }
     }
