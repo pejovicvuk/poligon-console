@@ -106,7 +106,7 @@ namespace Poligon // Note: actual namespace depends on the project name.
                 return false;
             }
 
-            for (int i = 0; i < vektori.Length; i++)
+            for (int i = 0; i < vektori.Length - 2; i++)
             {
                 Vektor v1 = vektori[i];
                 Tacka a = v1.a;
